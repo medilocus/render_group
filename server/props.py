@@ -22,18 +22,18 @@ from bpy.types import PropertyGroup
 from bpy.props import BoolProperty, IntProperty, FloatProperty, StringProperty, EnumProperty, PointerProperty
 
 
-class RenderGroupServer(PropertyGroup):
+class RENDERGROUP_SERVER_Props(PropertyGroup):
     pass
 
 
 classes = (
-    RenderGroupServer,
+    RENDERGROUP_SERVER_Props,
 )
 
 def register():
     for cls in classes:
         bpy.utils.register_class(cls)
-    bpy.types.Scene.render_group_server = PointerProperty(type=RenderGroupServer)
+    bpy.types.Scene.render_group_server = PointerProperty(type=RENDERGROUP_SERVER_Props)
 
 def unregister():
     for cls in classes:
