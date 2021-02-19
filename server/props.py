@@ -23,7 +23,7 @@ from bpy.props import BoolProperty, IntProperty, FloatProperty, StringProperty, 
 
 
 class RENDERGROUP_SERVER_Props(PropertyGroup):
-    show_clients = BoolProperty(
+    show_clients: BoolProperty(
         name="Connected Clients",
         description="Whether to show connected clients.",
         default=True
