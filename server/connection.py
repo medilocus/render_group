@@ -30,12 +30,15 @@ class Server:
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.bind((ip, port))
 
+        self.clients = []
+
     def start(self):
         self.server.listen()
         while True:
             conn, addr = self.server.accept()
             client = Client(conn, addr)
             threading.Thread(target=client.auth).start()
+            self.clients.append(client)
 
 
 class Client:
