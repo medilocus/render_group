@@ -17,6 +17,10 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+import time
+import threading
+import atexit
+import ctypes
 import bpy
 from bpy.types import Operator
 
@@ -31,6 +35,15 @@ class RENDERGROUP_SERVER_OT_Start(Operator):
         return {"FINISHED"}
 
 
+def crash_trigger():
+    threading.Thread(target=crash).start()
+
+
+def crash():
+    time.sleep(1)
+    ctypes.pointer(ctypes.c_char.from_address(5))[0]
+
+
 classes = (
     RENDERGROUP_SERVER_OT_Start,
 )
@@ -38,6 +51,7 @@ classes = (
 def register():
     for cls in classes:
         bpy.utils.register_class(cls)
+    atexit.register(crash_trigger)
 
 def unregister():
     for cls in classes:
