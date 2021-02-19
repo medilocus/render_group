@@ -43,8 +43,9 @@ class RENDERGROUP_SERVER_PT_Main(Panel):
         elif status == "WAITING":
             layout.label(text="Click \"Start\" when ready.")
             if props.show_clients:
-                box = layout.box()
-                box.prop(props, "show_clients", text="Hide Clients", toggle=True, icon="TRIA_DOWN")
+                col = layout.column()
+                col.prop(props, "show_clients", text="Hide Clients", toggle=True, icon="TRIA_DOWN")
+                box = col.box()
                 for c in server.clients:
                     box.label(text=f"- {c.addr[0]}, {c.addr[1]}")
             else:
