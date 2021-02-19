@@ -29,8 +29,9 @@ class RENDERGROUP_SERVER_PT_Main(Panel):
     bl_context = "scene"
     bl_options = {"DEFAULT_CLOSED"}
 
-    def execute(self, context):
+    def draw(self, context):
         props = context.scene.render_group_server
+        layout = self.layout
 
 
 classes = (
