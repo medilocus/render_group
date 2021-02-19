@@ -30,10 +30,25 @@ class RENDERGROUP_SERVER_PT_Main(Panel):
     bl_options = {"DEFAULT_CLOSED"}
 
     def draw(self, context):
+        from .operators import server, status
         props = context.scene.render_group_server
+        prefs = context.preferences.addons[__package__].preferences
         layout = self.layout
 
-        layout.operator("render_group_server.start")
+        if status == "NOT_STARTED":
+            layout.label(text=f"IP: {prefs.server_ip}")
+            layout.label(text="Change value in preferences.")
+            layout.operator("render_group_server.start")
+
+        elif status == "WAITING":
+            layout.label(text="Click \"Start\" when ready.")
+            if props.show_clients:
+                box = layout.box()
+                box.prop(props, "show_clients", text="Hide Clients", toggle=True, icon="TRIA_DOWN")
+                for c in server.clients:
+                    box.label(text=f"- {c.addr[0]}, {c.addr[1]}")
+            else:
+                layout.prop(props, "show_clients", text="Show Clients", toggle=True, icon="TRIA_RIGHT")
 
 
 classes = (
