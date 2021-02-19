@@ -33,6 +33,8 @@ class RENDERGROUP_SERVER_PT_Main(Panel):
         props = context.scene.render_group_server
         layout = self.layout
 
+        layout.operator("render_group_server.start")
+
 
 classes = (
     RENDERGROUP_SERVER_PT_Main,
