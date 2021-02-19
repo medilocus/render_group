@@ -28,6 +28,7 @@ class RENDERGROUP_SERVER_OT_Start(Operator):
 
     def execute(self, context):
         props = context.scene.render_group_server
+        return {"FINISHED"}
 
 
 classes = (
