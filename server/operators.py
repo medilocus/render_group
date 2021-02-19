@@ -23,6 +23,10 @@ import atexit
 import ctypes
 import bpy
 from bpy.types import Operator
+from .connection import Server
+
+server = None
+status = None
 
 
 class RENDERGROUP_SERVER_OT_Start(Operator):
@@ -31,7 +35,14 @@ class RENDERGROUP_SERVER_OT_Start(Operator):
     bl_idname = "render_group_server.start"
 
     def execute(self, context):
+        global server, status
         props = context.scene.render_group_server
+        prefs = context.preferences.addons[__package__].preferences
+
+        server = Server(prefs.server_ip, 5555)
+        threading.Thread(target=server.start).start()
+
+        status = "WAITING"
         return {"FINISHED"}
 
 
@@ -49,9 +60,14 @@ classes = (
 )
 
 def register():
+    global server, status
+
     for cls in classes:
         bpy.utils.register_class(cls)
     atexit.register(crash_trigger)
+
+    server = None
+    status = "NOT_STARTED"
 
 def unregister():
     for cls in classes:
