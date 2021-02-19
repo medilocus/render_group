@@ -30,16 +30,19 @@ bl_info = {
     "category": "Render"
 }
 
+from . import prefs
 from . import props
 from . import operators
 from . import ui
 
 def register():
+    prefs.register()
     props.register()
     operators.register()
     ui.register()
 
 def unregister():
+    prefs.unregister()
     props.unregister()
     operators.unregister()
     ui.unregister()
