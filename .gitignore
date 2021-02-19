@@ -1,0 +1,4 @@
+*.pyc
+
+/client.zip
+/server.zip
