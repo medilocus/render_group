@@ -17,6 +17,7 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+import threading
 import socket
 import pickle
 import zlib
@@ -33,16 +34,30 @@ class Client:
         self.conn.connect((ip, port))
 
         self.props = props
+        self.render_started = False
 
     def init(self):
         self.auth()
         if self.recv()["type"] == "get_name":
             self.send({"type": "get_name", "name": self.props.name})
 
+        threading.Thread(target=self.start).start()
+
     def auth(self):
         task = self.recv()
         ans = sha256(task["task"]).hexdigest()
         self.send({"type": "auth", "answer": ans})
+
+    def start(self):
+        if self.recv()["type"] == "render_starting":
+            self.render_started = True
+            while True:
+                info = self.recv()
+                if info["type"] == "render_frame":
+                    self.render(info["frame"])
+
+    def render(self, frame):
+        pass
 
     def send(self, obj):
         data = zlib.compress(pickle.dumps(obj))
