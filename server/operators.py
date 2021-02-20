@@ -67,7 +67,7 @@ class RENDERGROUP_SERVER_OT_StartRender(Operator):
             self.report({"ERROR"}, "Please connect at least one client.")
             return {"CANCELLED"}
 
-        threading.Thread(target=render, args=(props, server.clients))
+        threading.Thread(target=render, args=(props, server.clients)).start()
 
         status = "RENDERING"
         self.report({"INFO"}, "Rendering started.")
