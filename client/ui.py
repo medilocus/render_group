@@ -38,7 +38,7 @@ class RENDERGROUP_CLIENT_PT_Main(Panel):
         if status == "NOT_STARTED":
             layout.label(text=f"IP: {prefs.server_ip}")
             layout.label(text="Change value in preferences.")
-            layout.operator("render_group_client.start")
+            layout.operator("render_group_client.connect")
 
         elif status == "WAITING":
             layout.label(text="Waiting for server to start.")
