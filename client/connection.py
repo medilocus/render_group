@@ -31,16 +31,18 @@ class Client:
     def __init__(self, ip, port, props):
         self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.conn.connect((ip, port))
+
         self.props = props
+
+    def init(self):
         self.auth()
+        if self.recv()["type"] == "get_name":
+            self.send({"type": "get_name", "name": self.props.name})
 
     def auth(self):
         task = self.recv()
         ans = sha256(task["task"]).hexdigest()
         self.send({"type": "auth", "answer": ans})
-
-        if self.recv()["type"] == "get_name":
-            self.send({"type": "get_name", "name": self.props.name})
 
     def send(self, obj):
         data = zlib.compress(pickle.dumps(obj))
