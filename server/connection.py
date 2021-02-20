@@ -52,6 +52,7 @@ class Client:
         self.addr = addr
 
         self.busy = False
+        self.frame = None
 
     def start(self):
         self.send({"type": "get_name"})
@@ -71,6 +72,7 @@ class Client:
 
     def render_frame(self, frame, out_path):
         self.busy = True
+        self.frame = frame
         path = os.path.join(out_path, str(frame)+".jpg")
 
         self.send({"type": "render_frame", "frame": frame})
