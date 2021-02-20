@@ -23,7 +23,10 @@ from bpy.props import BoolProperty, IntProperty, FloatProperty, StringProperty, 
 
 
 class RENDERGROUP_CLIENT_Props(PropertyGroup):
-    pass
+    name: StringProperty(
+        name="Name",
+        description="Name of this client.\nWill be sent to the server as a reference.",
+    )
 
 
 classes = (
