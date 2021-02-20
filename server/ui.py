@@ -59,6 +59,9 @@ class RENDERGROUP_SERVER_PT_Main(Panel):
             else:
                 layout.prop(props, "show_clients", text="Show Clients", toggle=True, icon="TRIA_RIGHT")
 
+        elif status == "RENDERING":
+            layout.label(text="Rendering in progress.")
+
 
 classes = (
     RENDERGROUP_SERVER_PT_Main,
