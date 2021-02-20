@@ -36,8 +36,7 @@ class RENDERGROUP_SERVER_PT_Main(Panel):
         layout = self.layout
 
         if status == "NOT_STARTED":
-            layout.label(text=f"IP: {prefs.server_ip}")
-            layout.label(text="Change value in preferences.")
+            layout.prop(prefs, "server_ip")
             layout.operator("render_group_server.start")
 
         elif status == "WAITING":
