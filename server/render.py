@@ -21,17 +21,20 @@ import time
 import threading
 
 done = None
+curr_frame = None
 
 
 def render(props, clients):
-    global done
+    global done, curr_frame
 
-    done = False
     frame_start = props.frame_start
     frame_end = props.frame_end
     frame_step = props.frame_step
     out_path = props.out_path
     frames = list(range(frame_start, frame_end+1, frame_step))
+
+    done = False
+    curr_frame = frame_start
 
     for c in clients:
         c.send({"type": "render_starting"})
@@ -41,6 +44,7 @@ def render(props, clients):
         for c in clients:
             if not c.busy:
                 threading.Thread(target=c.render_frame, args=(frames.pop(0), out_path)).start()
+                curr_frame = frames[0]
                 time.sleep(0.01)
 
     done = True
