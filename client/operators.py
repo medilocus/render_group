@@ -36,7 +36,8 @@ class RENDERGROUP_CLIENT_OT_Start(Operator):
         props = context.scene.render_group_client
         prefs = context.preferences.addons[__package__].preferences
 
-        conn = Client(prefs.server_ip, 5555)
+        conn = Client(prefs.server_ip, 5555, props)
+        conn.init()
 
         status = "WAITING"
         return {"FINISHED"}
