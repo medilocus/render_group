@@ -17,10 +17,21 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+import time
+
 
 def render(props, clients):
     frame_start = props.frame_start
     frame_end = props.frame_end
     frame_step = props.frame_step
     out_dir = props.out_dir
-    frames = range(frame_start, frame_end+1, frame_step)
+    frames = list(range(frame_start, frame_end+1, frame_step))
+
+    for c in clients:
+        c.send({"type": "render_starting"})
+
+    while len(frames) > 0:
+        time.sleep(0.1)
+        for c in clients:
+            if not c.busy:
+                c.render_frame(frames.pop(0), out_dir)
