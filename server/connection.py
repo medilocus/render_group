@@ -17,6 +17,7 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+import os
 import random
 import threading
 import socket
@@ -50,6 +51,8 @@ class Client:
         self.conn = conn
         self.addr = addr
 
+        self.busy = False
+
     def start(self):
         self.send({"type": "get_name"})
         self.name = self.recv()["name"]
@@ -65,6 +68,18 @@ class Client:
             self.conn.close()
         else:
             self.start()
+
+    def render_frame(self, frame, out_dir):
+        self.busy = True
+        path = os.path.join(out_dir, frame+".jpg")
+
+        self.send({"type": "render_frame", "frame": frame})
+        image = self.recv()["image"]
+
+        with open(path, "wb") as file:
+            file.write(image)
+
+        self.busy = False
 
     def send(self, obj):
         data = zlib.compress(pickle.dumps(obj))
