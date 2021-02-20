@@ -41,6 +41,14 @@ class RENDERGROUP_SERVER_PT_Main(Panel):
 
         elif status == "WAITING":
             layout.label(text="Click \"Start\" when ready.")
+
+            col = layout.column(align=True)
+            col.prop(props, "frame_start")
+            col.prop(props, "frame_end")
+            col.prop(props, "frame_step")
+
+            layout.operator("render_group_server.start_render")
+
             if props.show_clients:
                 col = layout.column(align=True)
                 col.prop(props, "show_clients", text="Hide Clients", toggle=True, icon="TRIA_DOWN")
