@@ -36,7 +36,7 @@ class RENDERGROUP_CLIENT_PT_Main(Panel):
         layout = self.layout
 
         if not activated:
-            layout.operator("render_group_server.activate")
+            layout.operator("render_group_client.activate")
             return
 
         if status == "NOT_STARTED":
