@@ -29,6 +29,24 @@ class RENDERGROUP_SERVER_Props(PropertyGroup):
         default=True
     )
 
+    frame_start: IntProperty(
+        name="Frame Start",
+        description="Starting frame of render.",
+        default=0, soft_min=0, soft_max=100000
+    )
+
+    frame_end: IntProperty(
+        name="Frame End",
+        description="Ending frame of render.",
+        default=1000, soft_min=0, soft_max=100000
+    )
+
+    frame_step: IntProperty(
+        name="Frame Step",
+        description="Step of frames in render.",
+        default=1, min=1, soft_max=10
+    )
+
 
 classes = (
     RENDERGROUP_SERVER_Props,
