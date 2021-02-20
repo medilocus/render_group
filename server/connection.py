@@ -51,7 +51,8 @@ class Client:
         self.addr = addr
 
     def start(self):
-        pass
+        self.send({"type": "get_name"})
+        self.name = self.recv()["name"]
 
     def auth(self):
         chars = bytes(range(256))
