@@ -17,8 +17,10 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+import sys
 import time
 import threading
+from datetime import datetime
 
 done = None
 curr_frame = None
@@ -32,20 +34,42 @@ def render(props, clients):
     frame_step = props.frame_step
     out_path = props.out_path
     frames = list(range(frame_start, frame_end+1, frame_step))
+    num_total = len(frames)
 
     done = False
     curr_frame = frame_start
+    total_rendered = 0
 
     for c in clients:
         c.send({"type": "render_starting"})
 
     while len(frames) > 0:
-        time.sleep(0.1)
+        update_status(clients, total_rendered, num_total)
+        time.sleep(0.5)
+
         for c in clients:
             if not c.busy:
                 threading.Thread(target=c.render_frame, args=(frames.pop(0), out_path)).start()
+                total_rendered += 1
                 if len(frames) > 0:
                     curr_frame = frames[0]
                 time.sleep(0.01)
 
     done = True
+
+
+def update_status(clients, frames_rendered, num_to_render):
+    date = datetime.now().strftime("%m-%d-%Y %H:%M:%S")
+
+    sys.stdout.write("\n"*5)
+    sys.stdout.write(f"Render Group - Status update at {date}\n")
+    sys.stdout.write(f"- {frames_rendered} of {num_to_render} frames rendered ({int(frames_rendered/num_to_render*1000)/10})%\n")
+    sys.stdout.write(f"- {len(clients)} clients connected.\n")
+    for c in clients:
+        if c.busy:
+            status = f"Rendering frame {c.frame}"
+        else:
+            status = "Idle"
+        sys.stdout.write(f"    - {c.name}: {status}\n")
+
+    sys.stdout.flush()

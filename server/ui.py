@@ -72,6 +72,7 @@ class RENDERGROUP_SERVER_PT_Main(Panel):
                 layout.label(text="Please reload all Blender windows.")
             else:
                 layout.label(text="Rendering in progress.")
+                layout.label(text="Status is also printed to the console.")
                 layout.label(text=f"Current frame: {curr_frame}")
                 layout.separator()
 
