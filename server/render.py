@@ -18,6 +18,7 @@
 #
 
 import time
+import threading
 
 
 def render(props, clients):
@@ -34,4 +35,4 @@ def render(props, clients):
         time.sleep(0.1)
         for c in clients:
             if not c.busy:
-                c.render_frame(frames.pop(0), out_path)
+                threading.Thread(target=c.render_frame, args=(frames.pop(0), out_path)).start()
