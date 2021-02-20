@@ -47,6 +47,7 @@ class RENDERGROUP_SERVER_PT_Main(Panel):
             col.prop(props, "frame_end")
             col.prop(props, "frame_step")
 
+            layout.prop(props, "out_path")
             layout.operator("render_group_server.start_render")
 
             if props.show_clients:
