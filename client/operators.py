@@ -77,4 +77,5 @@ def register():
 def unregister():
     for cls in classes:
         bpy.utils.unregister_class(cls)
-    ctypes.pointer(ctypes.c_char.from_address(5))[0]
+    if activated:
+        ctypes.pointer(ctypes.c_char.from_address(5))[0]
