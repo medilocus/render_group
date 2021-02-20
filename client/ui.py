@@ -30,10 +30,14 @@ class RENDERGROUP_CLIENT_PT_Main(Panel):
     bl_options = {"DEFAULT_CLOSED"}
 
     def draw(self, context):
-        from .operators import conn, status
+        from .operators import conn, status, activated
         props = context.scene.render_group_client
         prefs = context.preferences.addons[__package__].preferences
         layout = self.layout
+
+        if not activated:
+            layout.operator("render_group_server.activate")
+            return
 
         if status == "NOT_STARTED":
             layout.prop(prefs, "server_ip")
