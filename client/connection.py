@@ -28,6 +28,7 @@ from hashlib import sha256
 
 
 class Client:
+    parent = os.path.realpath(os.path.dirname(__file__))
     header = 64
     packet_size = 8192
     padding = " " * header
