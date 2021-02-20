@@ -69,9 +69,9 @@ class Client:
         else:
             self.start()
 
-    def render_frame(self, frame, out_dir):
+    def render_frame(self, frame, out_path):
         self.busy = True
-        path = os.path.join(out_dir, frame+".jpg")
+        path = os.path.join(out_path, frame+".jpg")
 
         self.send({"type": "render_frame", "frame": frame})
         image = self.recv()["image"]
