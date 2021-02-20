@@ -36,6 +36,10 @@ class RENDERGROUP_CLIENT_OT_Start(Operator):
         props = context.scene.render_group_client
         prefs = context.preferences.addons[__package__].preferences
 
+        if props.name.strip() == "":
+            self.report({"ERROR"}, "Name is empty.")
+            return {"CANCELLED"}
+
         conn = Client(prefs.server_ip, 5555, props)
         conn.init()
 
