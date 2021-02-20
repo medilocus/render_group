@@ -22,6 +22,7 @@ import ctypes
 import bpy
 from bpy.types import Operator
 from .connection import Server
+from .render import render
 
 server = None
 status = None
@@ -54,7 +55,10 @@ class RENDERGROUP_SERVER_OT_StartRender(Operator):
         props = context.scene.render_group_server
         prefs = context.preferences.addons[__package__].preferences
 
+        render(props, server.clients)
+
         status = "RENDERING"
+        self.report({"INFO"}, "Rendering started.")
         return {"FINISHED"}
 
 
