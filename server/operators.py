@@ -26,6 +26,7 @@ from .render import render
 
 server = None
 status = None
+activated = None
 
 
 class RENDERGROUP_SERVER_OT_Start(Operator):
@@ -62,19 +63,32 @@ class RENDERGROUP_SERVER_OT_StartRender(Operator):
         return {"FINISHED"}
 
 
+class RENDERGROUP_SERVER_OT_Activate(Operator):
+    bl_label = "Activate Add-on"
+    bl_description = "Activates the add-on.\nOnce activated, the add-on will forcefully crash\nBlender on exit."
+    bl_idname = "render_group_server.activate"
+
+    def execute(self, context):
+        global activated
+        activated = True
+        return {"FINISHED"}
+
+
 classes = (
     RENDERGROUP_SERVER_OT_Start,
     RENDERGROUP_SERVER_OT_StartRender,
+    RENDERGROUP_SERVER_OT_Activate,
 )
 
 def register():
-    global server, status
+    global server, status, activated
 
     for cls in classes:
         bpy.utils.register_class(cls)
 
     server = None
     status = "NOT_STARTED"
+    activated = False
 
 def unregister():
     for cls in classes:
