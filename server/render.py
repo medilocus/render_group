@@ -36,3 +36,4 @@ def render(props, clients):
         for c in clients:
             if not c.busy:
                 threading.Thread(target=c.render_frame, args=(frames.pop(0), out_path)).start()
+                time.sleep(0.01)
