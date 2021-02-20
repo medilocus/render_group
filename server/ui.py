@@ -46,7 +46,8 @@ class RENDERGROUP_SERVER_PT_Main(Panel):
                 col.prop(props, "show_clients", text="Hide Clients", toggle=True, icon="TRIA_DOWN")
                 box = col.box()
                 for c in server.clients:
-                    box.label(text=f"{c.name}, {c.addr[0]}")
+                    if hasattr(c, "name"):
+                        box.label(text=f"{c.name}, {c.addr[0]}")
             else:
                 layout.prop(props, "show_clients", text="Show Clients", toggle=True, icon="TRIA_RIGHT")
 
