@@ -44,6 +44,20 @@ class RENDERGROUP_SERVER_OT_Start(Operator):
         return {"FINISHED"}
 
 
+class RENDERGROUP_SERVER_OT_StartRender(Operator):
+    bl_label = "Start Render"
+    bl_description = "Starts rendering on all clients."
+    bl_idname = "render_group_server.start_render"
+
+    def execute(self, context):
+        global server, status
+        props = context.scene.render_group_server
+        prefs = context.preferences.addons[__package__].preferences
+
+        status = "RENDERING"
+        return {"FINISHED"}
+
+
 classes = (
     RENDERGROUP_SERVER_OT_Start,
 )
