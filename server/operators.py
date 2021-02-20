@@ -21,6 +21,7 @@ import threading
 import ctypes
 import bpy
 from bpy.types import Operator
+from bpy.props import BoolProperty, IntProperty, FloatProperty, StringProperty, EnumProperty
 from .connection import Server
 from .render import render
 
@@ -51,15 +52,37 @@ class RENDERGROUP_SERVER_OT_StartRender(Operator):
     bl_description = "Starts rendering on all clients."
     bl_idname = "render_group_server.start_render"
 
+    show_confirm: BoolProperty(default=True)
+
     def execute(self, context):
         global server, status
         props = context.scene.render_group_server
         prefs = context.preferences.addons[__package__].preferences
 
+        if self.show_confirm:
+            bpy.ops.render_group_server.start_render_confirm("INVOKE_DEFAULT")
+            return {"CANCELLED"}
         render(props, server.clients)
 
         status = "RENDERING"
         self.report({"INFO"}, "Rendering started.")
+        return {"FINISHED"}
+
+
+class RENDERGROUP_SERVER_OT_StartRenderConfirm(Operator):
+    bl_label = "Start Render?"
+    bl_description = "Do you really want to start the render?"
+    bl_idname = "render_group_server.start_render_confirm"
+
+    def invoke(self, context, event):
+        return context.window_manager.invoke_props_dialog(self)
+
+    def draw(self, context):
+        layout = self.layout
+        layout.label(text="Do you really want to start the render?")
+
+    def execute(self, context):
+        bpy.ops.render_group_server.start_render(show_confirm=False)
         return {"FINISHED"}
 
 
@@ -77,6 +100,7 @@ class RENDERGROUP_SERVER_OT_Activate(Operator):
 classes = (
     RENDERGROUP_SERVER_OT_Start,
     RENDERGROUP_SERVER_OT_StartRender,
+    RENDERGROUP_SERVER_OT_StartRenderConfirm,
     RENDERGROUP_SERVER_OT_Activate,
 )
 
