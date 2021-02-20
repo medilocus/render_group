@@ -17,10 +17,13 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+import os
+import random
 import threading
 import socket
 import pickle
 import zlib
+import bpy
 from hashlib import sha256
 
 
@@ -34,7 +37,8 @@ class Client:
         self.conn.connect((ip, port))
 
         self.props = props
-        self.render_started = False
+        self.status = "WAITING"
+        self.frame = None
 
     def init(self):
         self.auth()
@@ -50,14 +54,29 @@ class Client:
 
     def start(self):
         if self.recv()["type"] == "render_starting":
-            self.render_started = True
+            self.status = "RENDERING"
             while True:
                 info = self.recv()
                 if info["type"] == "render_frame":
                     self.render(info["frame"])
 
     def render(self, frame):
-        pass
+        self.frame = frame
+        bpy.context.scene.frame_set(frame)
+
+        get_path = lambda: os.path.join(self.parent, sha256(str(random.random()).encode()).hexdigest()[:20]+".jpg")
+        path = get_path()
+        while os.path.isfile(path):
+            path = get_path()
+
+        bpy.ops.render.render()
+        bpy.data.images["Render Result"].save_render(path)
+
+        with open(path, "rb") as file:
+            data = file.read()
+        os.remove(path)
+
+        self.send({"type": "render_frame", "image": data})
 
     def send(self, obj):
         data = zlib.compress(pickle.dumps(obj))
