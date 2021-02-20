@@ -47,6 +47,12 @@ class RENDERGROUP_SERVER_Props(PropertyGroup):
         default=1, min=1, soft_max=10
     )
 
+    out_path: StringProperty(
+        name="Output Path",
+        description="Output directory of all images rendered.",
+        subtype="DIR_PATH"
+    )
+
 
 classes = (
     RENDERGROUP_SERVER_Props,
