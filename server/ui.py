@@ -31,6 +31,8 @@ class RENDERGROUP_SERVER_PT_Main(Panel):
 
     def draw(self, context):
         from .operators import server, status, activated
+        from .render import done, curr_frame
+
         props = context.scene.render_group_server
         prefs = context.preferences.addons[__package__].preferences
         layout = self.layout
@@ -65,7 +67,23 @@ class RENDERGROUP_SERVER_PT_Main(Panel):
                 layout.prop(props, "show_clients", text="Show Clients", toggle=True, icon="TRIA_RIGHT")
 
         elif status == "RENDERING":
-            layout.label(text="Rendering in progress.")
+            if done:
+                layout.label(text="Rendering finished.")
+                layout.label(text="Please reload all Blender windows.")
+            else:
+                layout.label(text="Rendering in progress.")
+                layout.label(text=f"Current frame: {curr_frame}")
+                layout.separator()
+
+                layout.label(text="Client statuses:")
+                box = layout.box()
+                for c in server.clients:
+                    text = f"{c.name}: "
+                    if c.busy:
+                        text += str(c.frame)
+                    else:
+                        text += "Idle"
+                    box.label(text=text)
 
 
 classes = (
