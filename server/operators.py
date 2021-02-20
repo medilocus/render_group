@@ -62,6 +62,11 @@ class RENDERGROUP_SERVER_OT_StartRender(Operator):
         if self.show_confirm:
             bpy.ops.render_group_server.start_render_confirm("INVOKE_DEFAULT")
             return {"CANCELLED"}
+
+        if len(server.clients) == 0:
+            self.report({"ERROR"}, "Please connect at least one client.")
+            return {"CANCELLED"}
+
         render(props, server.clients)
 
         status = "RENDERING"
