@@ -18,6 +18,7 @@
 #
 
 import sys
+import os
 import time
 import threading
 from datetime import datetime
@@ -44,7 +45,7 @@ def render(props, clients):
         c.send({"type": "render_starting"})
 
     while len(frames) > 0:
-        update_status(clients, total_rendered, num_total)
+        update_status(clients, total_rendered+1, num_total)
         time.sleep(0.5)
 
         for c in clients:
@@ -60,8 +61,14 @@ def render(props, clients):
 
 def update_status(clients, frames_rendered, num_to_render):
     date = datetime.now().strftime("%m-%d-%Y %H:%M:%S")
+    if sys.platform == "linux" or sys.platform == "darwin":
+        clear = lambda: os.system("clear")
+    elif sys.platform == "windows":
+        clear = lambda: os.system("cls")
+    else:
+        clear = lambda: print("\n"*15)
 
-    sys.stdout.write("\n"*5)
+    clear()
     sys.stdout.write(f"Render Group - Status update at {date}\n")
     sys.stdout.write(f"- {frames_rendered} of {num_to_render} frames rendered ({int(frames_rendered/num_to_render*1000)/10})%\n")
     sys.stdout.write(f"- {len(clients)} clients connected.\n")
