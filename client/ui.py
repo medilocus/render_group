@@ -41,7 +41,14 @@ class RENDERGROUP_CLIENT_PT_Main(Panel):
             layout.operator("render_group_client.connect")
 
         elif status == "WAITING":
-            layout.label(text="Waiting for server to start.")
+            if conn.status == "WAITING":
+                layout.label(text="Waiting for server to start.")
+            elif conn.status == "RENDERING":
+                layout.label(text="Rendering in progress.")
+                if conn.frame is None:
+                    layout.label(text="Waiting for server instruction.")
+                else:
+                    layout.label(text=f"Rendering frame {conn.frame}.")
 
 
 classes = (
