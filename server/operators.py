@@ -60,6 +60,7 @@ class RENDERGROUP_SERVER_OT_StartRender(Operator):
 
 classes = (
     RENDERGROUP_SERVER_OT_Start,
+    RENDERGROUP_SERVER_OT_StartRender,
 )
 
 def register():
