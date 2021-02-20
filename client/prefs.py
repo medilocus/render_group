@@ -19,7 +19,7 @@
 
 import bpy
 from bpy.types import AddonPreferences
-from bpy.props import BoolProperty, IntProperty, FloatProperty, StringProperty, EnumProperty, PointerProperty
+from bpy.props import BoolProperty, IntProperty, FloatProperty, StringProperty, EnumProperty
 
 
 class RENDERGROUP_CLIENT_Prefs(AddonPreferences):
