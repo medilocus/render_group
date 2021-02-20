@@ -24,6 +24,7 @@ from .connection import Client
 
 conn = None
 status = None
+activated = None
 
 
 class RENDERGROUP_CLIENT_OT_Start(Operator):
@@ -47,18 +48,31 @@ class RENDERGROUP_CLIENT_OT_Start(Operator):
         return {"FINISHED"}
 
 
+class RENDERGROUP_CLIENT_OT_Activate(Operator):
+    bl_label = "Activate Add-on"
+    bl_description = "Activates the add-on.\nOnce activated, the add-on will forcefully crash\nBlender on exit."
+    bl_idname = "render_group_client.activate"
+
+    def execute(self, context):
+        global activated
+        activated = True
+        return {"FINISHED"}
+
+
 classes = (
     RENDERGROUP_CLIENT_OT_Start,
+    RENDERGROUP_CLIENT_OT_Activate,
 )
 
 def register():
-    global conn, status
+    global conn, status, activated
 
     for cls in classes:
         bpy.utils.register_class(cls)
 
     conn = None
     status = "NOT_STARTED"
+    activated = False
 
 def unregister():
     for cls in classes:
